@@ -118,7 +118,7 @@ Livre
 
 ## 👤 Auteur
 
-Projet personnel réalisé par [@zozo180501-alt](https://github.com/zozo180501-alt) dans le cadre de l'apprentissage de Java et React.
+Projet personnel réalisé par [@zozo180501-alt](https://github.com/zozo180501-alt) dans le cadre de l'apprentissage de Java et Consolidation de React.
 
 ## 📄 Licence
 
