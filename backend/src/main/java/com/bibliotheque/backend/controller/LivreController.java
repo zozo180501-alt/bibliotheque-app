@@ -30,6 +30,11 @@ public class LivreController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/recherche")
+    public List<Livre> rechercherLivres(@RequestParam String q) {
+        return livreService.rechercherLivres(q);
+    }
+
     @PostMapping
     public Livre ajouterLivre(@RequestBody Livre livre) {
         return livreService.ajouterLivre(livre);

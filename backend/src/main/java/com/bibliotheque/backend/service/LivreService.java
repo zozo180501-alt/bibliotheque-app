@@ -45,4 +45,8 @@ public class LivreService {
     public void supprimerLivre(Long id) {
         livreRepository.deleteById(id);
     }
+
+    public List<Livre> rechercherLivres(String recherche) {
+        return livreRepository.findByTitreContainingIgnoreCaseOrAuteurContainingIgnoreCase(recherche, recherche);
+    }
 }
