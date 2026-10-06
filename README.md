@@ -54,7 +54,7 @@ bibliotheque-app/
 - [x] Modifier le statut d'un livre (à lire / en cours / terminé)
 - [x] Noter un livre (1 à 5)
 - [x] Supprimer un livre
-- [ ] Rechercher un livre par titre ou auteur
+- [x] Rechercher un livre par titre ou auteur
 
 ### Fonctionnalités futures
 - [ ] Filtres par statut
