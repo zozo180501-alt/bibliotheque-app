@@ -49,11 +49,11 @@ bibliotheque-app/
 ## ✨ Fonctionnalités
 
 ### MVP (en cours de développement)
-- [ ] Ajouter un livre (titre, auteur, statut)
-- [ ] Lister tous les livres
-- [ ] Modifier le statut d'un livre (à lire / en cours / terminé)
-- [ ] Noter un livre (1 à 5)
-- [ ] Supprimer un livre
+- [x] Ajouter un livre (titre, auteur, statut)
+- [x] Lister tous les livres
+- [x] Modifier le statut d'un livre (à lire / en cours / terminé)
+- [x] Noter un livre (1 à 5)
+- [x] Supprimer un livre
 - [ ] Rechercher un livre par titre ou auteur
 
 ### Fonctionnalités futures
