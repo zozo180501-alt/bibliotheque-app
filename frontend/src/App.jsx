@@ -1,122 +1,105 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react';
+import ListeLivres from './components/ListeLivres';
+import FormulaireLivre from './components/FormulaireLivre';
+import { getLivres, ajouterLivre, modifierLivre, supprimerLivre } from './services/api';
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [livres, setLivres] = useState([]);
+    const [filtreStatut, setFiltreStatut] = useState('TOUS');
+    const [tri, setTri] = useState('DATE_DESC');
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
+    const chargerLivres = () => {
+        getLivres()
+            .then((response) => setLivres(response.data))
+            .catch((error) => console.error("Erreur lors du chargement des livres :", error));
+    };
+
+    useEffect(() => {
+        chargerLivres();
+    }, []);
+
+    const handleAjouter = (nouveauLivre) => {
+        ajouterLivre(nouveauLivre)
+            .then(() => chargerLivres())
+            .catch((error) => console.error("Erreur lors de l'ajout :", error));
+    };
+
+    const handleSupprimer = (id) => {
+        supprimerLivre(id)
+            .then(() => chargerLivres())
+            .catch((error) => console.error("Erreur lors de la suppression :", error));
+    };
+
+    const handleChangerStatut = (id, nouveauStatut) => {
+        const livre = livres.find((l) => l.id === id);
+        const livreModifie = { ...livre, statut: nouveauStatut };
+        modifierLivre(id, livreModifie)
+            .then(() => chargerLivres())
+            .catch((error) => console.error("Erreur lors de la modification :", error));
+    };
+
+    const handleNoter = (id, nouvelleNote) => {
+        const livre = livres.find((l) => l.id === id);
+        const livreModifie = { ...livre, note: nouvelleNote };
+        modifierLivre(id, livreModifie)
+            .then(() => chargerLivres())
+            .catch((error) => console.error("Erreur lors de la notation :", error));
+    };
+
+    // 1. On filtre d'abord
+    const livresFiltres = filtreStatut === 'TOUS'
+        ? livres
+        : livres.filter((livre) => livre.statut === filtreStatut);
+
+    // 2. Puis on trie le résultat filtré (on copie le tableau avec [...] pour ne pas muter l'original)
+    const livresAffiches = [...livresFiltres].sort((a, b) => {
+        switch (tri) {
+            case 'NOTE_DESC':
+                return (b.note || 0) - (a.note || 0);
+            case 'NOTE_ASC':
+                return (a.note || 0) - (b.note || 0);
+            case 'DATE_ASC':
+                return new Date(a.dateAjout) - new Date(b.dateAjout);
+            case 'DATE_DESC':
+            default:
+                return new Date(b.dateAjout) - new Date(a.dateAjout);
+        }
+    });
+
+    return (
         <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+            <FormulaireLivre onAjouter={handleAjouter} />
 
-      <div className="ticks"></div>
+            <div className="controles-liste">
+                <label>
+                    Filtrer :
+                    <select value={filtreStatut} onChange={(e) => setFiltreStatut(e.target.value)}>
+                        <option value="TOUS">Tous</option>
+                        <option value="A_LIRE">À lire</option>
+                        <option value="EN_COURS">En cours</option>
+                        <option value="TERMINE">Terminé</option>
+                    </select>
+                </label>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+                <label>
+                    Trier par :
+                    <select value={tri} onChange={(e) => setTri(e.target.value)}>
+                        <option value="DATE_DESC">Date d'ajout (récent → ancien)</option>
+                        <option value="DATE_ASC">Date d'ajout (ancien → récent)</option>
+                        <option value="NOTE_DESC">Note (meilleure → pire)</option>
+                        <option value="NOTE_ASC">Note (pire → meilleure)</option>
+                    </select>
+                </label>
+            </div>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+            <ListeLivres
+                livres={livresAffiches}
+                onSupprimer={handleSupprimer}
+                onChangerStatut={handleChangerStatut}
+                onNoter={handleNoter}
+            />
+        </div>
+    );
 }
 
-export default App
+export default App;

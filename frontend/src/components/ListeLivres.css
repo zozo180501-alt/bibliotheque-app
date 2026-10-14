@@ -1,0 +1,31 @@
+.liste-livres table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #24243e;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.liste-livres th,
+.liste-livres td {
+    padding: 12px 16px;
+    text-align: left;
+}
+
+.liste-livres th {
+    background-color: #2f2f52;
+    font-weight: 600;
+}
+
+.liste-livres tbody tr {
+    border-top: 1px solid #38384f;
+}
+
+.liste-livres tbody tr:hover {
+    background-color: #2a2a45;
+}
+
+.liste-livres button {
+    background-color: #e74c3c;
+    color: white;
+}
